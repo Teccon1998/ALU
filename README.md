@@ -1,18 +1,46 @@
-## Getting Started
+## Plaid Transactions Linked-List App
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+This repository now includes a Java CLI app that:
 
-## Folder Structure
+1. Connects to Plaid.
+2. Fetches the user's bank accounts.
+3. Fetches **all transactions** via `/transactions/sync` pagination.
+4. Stores each transaction in a **custom singly linked list**.
 
-The workspace contains two folders by default, where:
+## Files
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+- `src/PlaidApp.java` – entrypoint CLI app.
+- `src/PlaidClient.java` – minimal Plaid API client (HTTP + JSON field extraction).
+- `src/TransactionLinkedList.java` – custom linked list implementation for transactions.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+## Required environment variables
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+- `PLAID_CLIENT_ID`
+- `PLAID_SECRET`
+- `PLAID_ACCESS_TOKEN`
 
-## Dependency Management
+Optional:
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+- `PLAID_ENV` (`sandbox`, `development`, or `production`; defaults to `sandbox`)
+
+## Compile
+
+```bash
+javac src/TransactionLinkedList.java src/PlaidClient.java src/PlaidApp.java
+```
+
+## Run
+
+```bash
+PLAID_CLIENT_ID=... \
+PLAID_SECRET=... \
+PLAID_ACCESS_TOKEN=... \
+PLAID_ENV=sandbox \
+java -cp src PlaidApp
+```
+
+## Notes
+
+- The app prints account summaries.
+- The app loads all `added` transactions from `/transactions/sync` pages into the linked list.
+- The app prints a preview of up to the first 10 linked-list transactions.
